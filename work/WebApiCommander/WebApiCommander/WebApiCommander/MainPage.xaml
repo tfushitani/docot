@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:WebApiCommander"
+             x:Class="WebApiCommander.MainPage">
+
+    <StackLayout>
+        <Entry x:Name="entry1" 
+               Text="http://www.sapporoworks.ne.jp/">
+            
+        </Entry>
+        <Button Text="This is Button" Clicked="Button_ClickedAsync"></Button>
+        <Label  x:Name="label1" 
+                Text="Hello World! Please entnter WebAPI!" 
+                VerticalOptions="Center" 
+                HorizontalOptions="Center" />
+    </StackLayout>
+
+    
+
+
+
+</ContentPage>
