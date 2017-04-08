@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:DocotChit"
+             x:Class="DocotChit.MainPage">
+
+    <StackLayout>
+        <Label Text="ニックネーム" 
+               VerticalOptions="Center" 
+               HorizontalOptions="Center" />
+
+        <Editor x:Name="editor1" />
+        
+        <Button Text="登録・更新" Clicked="Button_ClickedAsync"></Button>
+    </StackLayout>
+</ContentPage>
