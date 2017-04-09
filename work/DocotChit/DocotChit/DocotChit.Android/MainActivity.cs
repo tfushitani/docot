@@ -21,7 +21,14 @@ namespace DocotChit.Droid
 
 			global::Xamarin.Forms.Forms.Init (this, bundle);
 			LoadApplication (new DocotChit.App ());
+
+            // 位置情報提供サービスを起動する
+            StartService(new Android.Content.Intent(this, typeof(DocotService)));
 		}
+
+
+
+
 	}
 }
 
