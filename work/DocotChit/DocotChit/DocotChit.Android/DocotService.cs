@@ -15,6 +15,8 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using Newtonsoft.Json;
 
+using Plugin.Geolocator;
+using Plugin.Geolocator.Abstractions;
 
 namespace DocotChit.Droid
 {
@@ -38,6 +40,9 @@ namespace DocotChit.Droid
                 //
                 //var id = Application.Current.Properties["deviceId"] as String;
                 RegisterLatitudeLongtude("34.742203", "132.886971");
+
+
+
             }
 
 
@@ -77,6 +82,14 @@ namespace DocotChit.Droid
         async void RegisterLatitudeLongtude(String latitude, String longitude)
         {
             var method = new HttpMethod("PATCH");
+
+            IGeolocator locator = CrossGeolocator.Current;
+            locator.DesiredAccuracy = 50; // <- 1. 50m‚Ì¸“x‚ÉŽw’è
+
+            Position position = await locator.GetPositionAsync(timeoutMilliseconds: 10000);
+            latitude = position.Latitude.ToString();
+            longitude = position.Longitude.ToString();
+
 
             String jsonString = "{\"latitude\":" + latitude + ",\"longitude\":" + longitude + "}";
 
