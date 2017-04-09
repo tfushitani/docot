@@ -37,7 +37,7 @@ namespace DocotChit.Droid
                 // Ç∑Ç≈Ç…é©í[ññèÓïÒÇ™ìoò^Ç≥ÇÍÇƒÇ¢ÇÈèÍçáÇÕtrueÇï‘Ç∑
                 //
                 //var id = Application.Current.Properties["deviceId"] as String;
-                RegisterLatitudeLongtude("1", "1");
+                RegisterLatitudeLongtude("34.742203", "132.886971");
             }
 
 
@@ -78,10 +78,12 @@ namespace DocotChit.Droid
         {
             var method = new HttpMethod("PATCH");
 
-            String jsonString = "{\"latitude\":\"" + latitude + "\",\"latitude\":\""+longitude+"}"; ;
+            String jsonString = "{\"latitude\":" + latitude + ",\"longitude\":" + longitude + "}";
+
+
             HttpContent content = new StringContent(jsonString, Encoding.UTF8, "application/json");
 
-            var request = new HttpRequestMessage(method, "http://182.163.58.118:8080/docot/v1/devices/{deviceId}/")
+            var request = new HttpRequestMessage(method, "http://182.163.58.118:8080/docot/v1/devices/MYHZKL26OVBSRP5M6ROP7MPYIQ/")
             {
                 Content = content
             };
@@ -95,6 +97,9 @@ namespace DocotChit.Droid
             try
             {
                 response = await client.SendAsync(request);
+
+
+
                 // If you want to use the timeout you set
                 //response = await client.SendRequestAsync(request).AsTask(cancellationToken);
             }
@@ -103,6 +108,10 @@ namespace DocotChit.Droid
                 Console.WriteLine("ERROR: " + e.ToString());
             }
 
+            String resp;
+            resp =await response.Content.ReadAsStringAsync();
+
+            Console.WriteLine(resp);
 
             return;
         }
