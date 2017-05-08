@@ -31,9 +31,12 @@ namespace DocotChit.Droid
         public override StartCommandResult OnStartCommand(Intent intent, StartCommandFlags flags, int startId)
         {
             Console.WriteLine("サービス開始しました");
+            locator = CrossGeolocator.Current;
+
+            locator.PositionChanged += CrossGeolocator_Current_PositionChanged;
 
 
-           // if (Application.Current.Properties.ContainsKey("deviceId"))
+            // if (Application.Current.Properties.ContainsKey("deviceId"))
             {
                 //
                 // すでに自端末情報が登録されている場合はtrueを返す
@@ -50,6 +53,17 @@ namespace DocotChit.Droid
 
             return StartCommandResult.Sticky;
         }
+
+        void CrossGeolocator_Current_PositionChanged(object sender, Plugin.Geolocator.Abstractions.PositionEventArgs e)
+        {
+            var position = e.Position;
+
+            Console.WriteLine(position.Timestamp + ":" + position.Latitude + ":" + position.Longitude + ":" +
+                position.Altitude + ":"+ position.AltitudeAccuracy+ ":"+ position.Accuracy+":"+position.Heading+":"+position.Speed);
+
+
+        }
+
 
         public override void OnDestroy()
         {
@@ -79,12 +93,14 @@ namespace DocotChit.Droid
             return await response.Content.ReadAsStringAsync();
         }
 
+        IGeolocator locator;
+
         async void RegisterLatitudeLongtude(String latitude, String longitude)
         {
             var method = new HttpMethod("PATCH");
 
-            IGeolocator locator = CrossGeolocator.Current;
             locator.DesiredAccuracy = 50; // <- 1. 50mの精度に指定
+
 
             Position position = await locator.GetPositionAsync(timeoutMilliseconds: 10000);
             latitude = position.Latitude.ToString();
@@ -128,6 +144,8 @@ namespace DocotChit.Droid
 
             return;
         }
+
+
 
         class RegisterUserInfoResponseData
         {
