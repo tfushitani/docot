@@ -61,6 +61,7 @@ namespace DocotChit.Droid
             Console.WriteLine(position.Timestamp + ":" + position.Latitude + ":" + position.Longitude + ":" +
                 position.Altitude + ":"+ position.AltitudeAccuracy+ ":"+ position.Accuracy+":"+position.Heading+":"+position.Speed);
 
+            UpdateLatitudeLongtude(position.Latitude.ToString(), position.Longitude.ToString());
 
         }
 
@@ -94,6 +95,51 @@ namespace DocotChit.Droid
         }
 
         IGeolocator locator;
+
+        async void UpdateLatitudeLongtude(String latitude, String longitude)
+        {
+            var method = new HttpMethod("PATCH");
+
+            locator.DesiredAccuracy = 50; // <- 1. 50m‚Ì¸“x‚ÉŽw’è
+
+            String jsonString = "{\"latitude\":" + latitude + ",\"longitude\":" + longitude + "}";
+
+
+            HttpContent content = new StringContent(jsonString, Encoding.UTF8, "application/json");
+
+            var request = new HttpRequestMessage(method, "http://182.163.58.118:8080/docot/v1/devices/MYHZKL26OVBSRP5M6ROP7MPYIQ/")
+            {
+                Content = content
+            };
+
+            HttpResponseMessage response = new HttpResponseMessage();
+            // In case you want to set a timeout
+            //CancellationToken cancellationToken = new CancellationTokenSource(60).Token;
+
+            var client = new HttpClient();
+
+            try
+            {
+                response = await client.SendAsync(request);
+
+
+
+                // If you want to use the timeout you set
+                //response = await client.SendRequestAsync(request).AsTask(cancellationToken);
+            }
+            catch (TaskCanceledException e)
+            {
+                Console.WriteLine("ERROR: " + e.ToString());
+            }
+
+            String resp;
+            resp = await response.Content.ReadAsStringAsync();
+
+            Console.WriteLine(resp);
+
+            return;
+        }
+
 
         async void RegisterLatitudeLongtude(String latitude, String longitude)
         {
