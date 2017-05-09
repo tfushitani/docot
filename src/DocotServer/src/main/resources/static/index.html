@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Docot Information</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/locale/bootstrap-table-ja-JP.min.js"></script>
+
+    <script src="https://momentjs.com/downloads/moment.min.js"></script>
+    <script src="js/main.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <h2>Docot Information</h2>
+    <p>更新日時が24時間以内の情報ば表示しとるとよ。アプリインストール直後や電源オフったりしとったら表示されんことのあっばい。</p>
+    <table class="table table-striped" id="devices">
+        <thead>
+        <tr>
+            <th data-field="nickname">ニックネーム</th>
+            <th data-field="address">所在地</th>
+            <th data-field="positionUpdated" data-formatter="dateFormat">更新時刻</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+
+</body>
+</html>
