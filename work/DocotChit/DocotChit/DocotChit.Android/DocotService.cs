@@ -23,64 +23,89 @@ namespace DocotChit.Droid
     [Service]
     public class DocotService : Service
     {
+
+#region メンバ変数
+        /// <summary>
+        /// 位置情報取得ライブラリ
+        /// </summary>
+        IGeolocator locator;
+        #endregion
+
+#region 定数
+        /// <summary>
+        /// 位置情報監視の最小間隔時間(秒)
+        /// </summary>
+        const int MIN_TIME = 10;
+
+        /// <summary>
+        /// 位置情報監視の最小距離
+        /// </summary>
+        const int MIN_DISTANCE = 30;
+#endregion
+
         public override IBinder OnBind(Intent intent)
         {
             return null;
         }
 
+        /// <summary>
+        /// サービス起動時処理
+        /// </summary>
+        /// <param name="intent"></param>
+        /// <param name="flags"></param>
+        /// <param name="startId"></param>
+        /// <returns></returns>
         public override StartCommandResult OnStartCommand(Intent intent, StartCommandFlags flags, int startId)
         {
-            Console.WriteLine("サービス開始しました");
+            Console.WriteLine("【Debug】OnStartCommand +");
+
+            // 位置情報取得ライブラリを初期化する
             locator = CrossGeolocator.Current;
+            // 1. 50mの精度に指定
+            locator.DesiredAccuracy = 50; 
 
+            // 位置情報変更時イベントの監視を開始する
             locator.PositionChanged += CrossGeolocator_Current_PositionChanged;
-            locator.StartListeningAsync(60, 0);
+            locator.StartListeningAsync(MIN_TIME, MIN_DISTANCE);
 
-            // if (Application.Current.Properties.ContainsKey("deviceId"))
-            {
-                //
-                // すでに自端末情報が登録されている場合はtrueを返す
-                //
-                //var id = Application.Current.Properties["deviceId"] as String;
-                RegisterLatitudeLongtude("34.742203", "132.886971");
-
-
-
-            }
-
-
-
-
+            Console.WriteLine("【Debug】OnStartCommand -");
             return StartCommandResult.Sticky;
         }
 
+        /// <summary>
+        /// 位置情報変更時ハンドラ
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void CrossGeolocator_Current_PositionChanged(object sender, Plugin.Geolocator.Abstractions.PositionEventArgs e)
         {
-            var position = e.Position;
+            Console.WriteLine("【Debug】CrossGeolocator_Current_PositionChanged +");
+            Console.WriteLine("【Debug】" + e.Position.Timestamp + ":" + e.Position.Latitude + ":" + e.Position.Longitude + ":" +
+                e.Position.Altitude + ":" + e.Position.AltitudeAccuracy + ":" + e.Position.Accuracy + ":" + e.Position.Heading + ":" + e.Position.Speed);
 
-            Console.WriteLine(position.Timestamp + ":" + position.Latitude + ":" + position.Longitude + ":" +
-                position.Altitude + ":"+ position.AltitudeAccuracy+ ":"+ position.Accuracy+":"+position.Heading+":"+position.Speed);
+            // Docotサーバーに位置情報を送信する
+            UpdateLatitudeLongtude(e.Position.Latitude.ToString(), e.Position.Longitude.ToString());
 
-            UpdateLatitudeLongtude(position.Latitude.ToString(), position.Longitude.ToString());
-
+            Console.WriteLine("【Debug】CrossGeolocator_Current_PositionChanged -");
         }
 
-
+        /// <summary>
+        /// サービス終了時処理
+        /// </summary>
         public override void OnDestroy()
         {
             base.OnDestroy();
             Console.WriteLine("サービスを終了しました");
         }
 
-
-        //
-        // ユーザー情報登録要求
-        //
+        /// <summary>
+        /// ユーザー情報登録要求 （Docotサーバー）
+        /// </summary>
+        /// <param name="nickname"></param>
+        /// <returns></returns>
         async Task<String> RegisterUserInfo(String nickname)
         {
             var httpClient = new HttpClient();
-
-            
 
             // POSTする内容を生成する
             String jsonobj = "{\"nickname\":\"" + nickname + "\"}";
@@ -94,13 +119,15 @@ namespace DocotChit.Droid
             return await response.Content.ReadAsStringAsync();
         }
 
-        IGeolocator locator;
-
+        /// <summary>
+        /// 位置情報送信要求（Docotサーバー）
+        /// </summary>
+        /// <param name="latitude"></param>
+        /// <param name="longitude"></param>
         async void UpdateLatitudeLongtude(String latitude, String longitude)
         {
             var method = new HttpMethod("PATCH");
 
-            locator.DesiredAccuracy = 50; // <- 1. 50mの精度に指定
 
             String jsonString = "{\"latitude\":" + latitude + ",\"longitude\":" + longitude + "}";
 
@@ -191,8 +218,10 @@ namespace DocotChit.Droid
             return;
         }
 
-
-
+#region 内部クラス
+        /// <summary>
+        /// 位置情報データクラス
+        /// </summary>
         class RegisterUserInfoResponseData
         {
             public String deviceId { get; set; }
@@ -203,9 +232,8 @@ namespace DocotChit.Droid
             public String address { get; set; }
             public String cityCode { get; set; }
             public String cityName { get; set; }
-
         }
-
+#endregion
 
     }
 }
