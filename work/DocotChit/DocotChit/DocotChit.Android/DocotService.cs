@@ -68,6 +68,9 @@ namespace DocotChit.Droid
             locator.PositionChanged += CrossGeolocator_Current_PositionChanged;
             locator.StartListeningAsync(MIN_TIME, MIN_DISTANCE);
 
+            // 
+            RegisterLatitudeLongtude();
+
             Console.WriteLine("ÅyDebugÅzOnStartCommand -");
             return StartCommandResult.Sticky;
         }
@@ -173,12 +176,14 @@ namespace DocotChit.Droid
         }
 
 
-        async void RegisterLatitudeLongtude(String latitude, String longitude)
+        async void RegisterLatitudeLongtude()
         {
             var method = new HttpMethod("PATCH");
 
             locator.DesiredAccuracy = 50; // <- 1. 50mÇÃê∏ìxÇ…éwíË
 
+            String latitude;
+            String longitude;
 
             Position position = await locator.GetPositionAsync(timeoutMilliseconds: 10000);
             latitude = position.Latitude.ToString();
