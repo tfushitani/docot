@@ -34,7 +34,7 @@ namespace DocotChit.Droid
             locator = CrossGeolocator.Current;
 
             locator.PositionChanged += CrossGeolocator_Current_PositionChanged;
-
+            locator.StartListeningAsync(60, 0);
 
             // if (Application.Current.Properties.ContainsKey("deviceId"))
             {
