@@ -35,12 +35,12 @@ namespace DocotChit.Droid
         /// <summary>
         /// 位置情報監視の最小間隔時間(秒)
         /// </summary>
-        const int MIN_TIME = 10;
+        const int MIN_TIME = 1800;
 
         /// <summary>
         /// 位置情報監視の最小距離
         /// </summary>
-        const int MIN_DISTANCE = 30;
+        const int MIN_DISTANCE = 0;
 #endregion
 
         public override IBinder OnBind(Intent intent)
@@ -73,6 +73,20 @@ namespace DocotChit.Droid
         }
 
         /// <summary>
+        /// サービス終了時処理
+        /// </summary>
+        public override void OnDestroy()
+        {
+            Console.WriteLine("【Debug】OnDestroy() +");
+
+            UpdateLatitudeLongtude("0", "0");
+
+            base.OnDestroy();
+
+            Console.WriteLine("【Debug】OnDestroy() -");
+        }
+
+        /// <summary>
         /// 位置情報変更時ハンドラ
         /// </summary>
         /// <param name="sender"></param>
@@ -87,15 +101,6 @@ namespace DocotChit.Droid
             UpdateLatitudeLongtude(e.Position.Latitude.ToString(), e.Position.Longitude.ToString());
 
             Console.WriteLine("【Debug】CrossGeolocator_Current_PositionChanged -");
-        }
-
-        /// <summary>
-        /// サービス終了時処理
-        /// </summary>
-        public override void OnDestroy()
-        {
-            base.OnDestroy();
-            Console.WriteLine("サービスを終了しました");
         }
 
         /// <summary>
