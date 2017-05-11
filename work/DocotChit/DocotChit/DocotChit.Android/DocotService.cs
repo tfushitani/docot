@@ -33,9 +33,9 @@ namespace DocotChit.Droid
 
 #region 定数
         /// <summary>
-        /// 位置情報監視の最小間隔時間(秒)
+        /// 位置情報監視の最小間隔時間(ミリ秒)
         /// </summary>
-        const int MIN_TIME = 1800;
+        const int MIN_TIME = (1800*1000);
 
         /// <summary>
         /// 位置情報監視の最小距離
