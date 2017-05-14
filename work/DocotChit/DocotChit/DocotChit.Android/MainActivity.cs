@@ -20,14 +20,15 @@ namespace DocotChit.Droid
 			base.OnCreate (bundle);
 
 			global::Xamarin.Forms.Forms.Init (this, bundle);
-			LoadApplication (new DocotChit.App ());
+
+            ServiceConnectionStubAndroid serviceConnectionStub = new ServiceConnectionStubAndroid();
+
+
+            LoadApplication (new DocotChit.App (serviceConnectionStub));
 
             // 位置情報提供サービスを起動する
             StartService(new Android.Content.Intent(this, typeof(DocotService)));
 		}
-
-
-
 
 	}
 }

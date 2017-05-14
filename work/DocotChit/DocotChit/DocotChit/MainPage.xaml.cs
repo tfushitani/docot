@@ -19,6 +19,14 @@ namespace DocotChit
 			InitializeComponent();
 		}
 
+        public MainPage(ServiceConnectionStub x)
+        {
+            InitializeComponent();
+
+            Console.WriteLine("【Debug】MainPage x =" + x.Getstr());
+        }
+
+
         //
         // 登録・更新ボタンクリック イベントハンドラ
         //

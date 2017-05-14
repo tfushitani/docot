@@ -68,7 +68,7 @@ namespace DocotChit.Droid
             locator.PositionChanged += CrossGeolocator_Current_PositionChanged;
             locator.StartListeningAsync(MIN_TIME, MIN_DISTANCE);
 
-            // 
+            // ‰Šú’l‚Æ‚È‚éˆÊ’uî•ñ‚ğ‘—M‚·‚é
             RegisterLatitudeLongtude();
 
             Console.WriteLine("yDebugzOnStartCommand -");

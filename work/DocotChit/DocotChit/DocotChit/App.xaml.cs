@@ -16,7 +16,14 @@ namespace DocotChit
 			MainPage = new DocotChit.MainPage();
 		}
 
-		protected override void OnStart ()
+        public App(ServiceConnectionStub x)
+        {
+            InitializeComponent();
+
+            MainPage = new DocotChit.MainPage(x);
+        }
+
+        protected override void OnStart ()
 		{
 			// Handle when your app starts
 		}
