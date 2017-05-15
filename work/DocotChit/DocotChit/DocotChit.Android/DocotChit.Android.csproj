@@ -117,6 +117,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DocotService.cs" />
+    <Compile Include="DocotServiceBinder.cs" />
     <Compile Include="DocotServiceConnection.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="MainApplication.cs" />

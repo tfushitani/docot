@@ -16,11 +16,16 @@ namespace DocotChit.Droid
     {
         DocotServiceConnection connection = new DocotServiceConnection();
 
+        public ServiceConnectionStubAndroid(Activity activity)
+        {
+            Console.WriteLine("ÅyDebugÅzÇQ");
+            Intent serviceToStart = new Intent(activity, typeof(DocotService));
+            activity.BindService(serviceToStart, connection, Bind.AutoCreate);
+        }
+
         public override string Getstr()
         {
             return connection.GetFormattedTimestamp();
-
-
         }
     }
 }

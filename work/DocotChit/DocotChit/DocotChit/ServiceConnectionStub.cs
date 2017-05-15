@@ -7,5 +7,6 @@ namespace DocotChit
     public abstract class ServiceConnectionStub
     {
         public abstract string Getstr();
+
     }
 }

@@ -41,11 +41,13 @@ namespace DocotChit.Droid
         /// 位置情報監視の最小距離
         /// </summary>
         const int MIN_DISTANCE = 0;
-#endregion
+        #endregion
 
         public override IBinder OnBind(Intent intent)
         {
-            return null;
+            // This method must always be implemented
+            this.Binder = new DocotServiceBinder(this);
+            return this.Binder;
         }
 
         /// <summary>
@@ -157,8 +159,6 @@ namespace DocotChit.Droid
             {
                 response = await client.SendAsync(request);
 
-
-
                 // If you want to use the timeout you set
                 //response = await client.SendRequestAsync(request).AsTask(cancellationToken);
             }
@@ -228,7 +228,17 @@ namespace DocotChit.Droid
             return;
         }
 
-#region 内部クラス
+        public IBinder Binder { get; private set; }
+
+
+
+        public string GetFormattedTimestamp()
+        {
+            return "せいこう！";
+        }
+
+
+        #region 内部クラス
         /// <summary>
         /// 位置情報データクラス
         /// </summary>

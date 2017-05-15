@@ -14,13 +14,32 @@ namespace DocotChit.Droid
 {
     class DocotServiceConnection : Java.Lang.Object, IServiceConnection
     {
+
+        public DocotServiceBinder Binder { get; private set; }
+
+        public bool IsConnected { get; private set; }
+
         public void OnServiceConnected(ComponentName name, IBinder service)
         {
+            Binder = service as DocotServiceBinder;
+
+            Console.WriteLine("ÅyDebugÅz" + name.ClassName);
+
+            IsConnected = this.Binder != null;
         }
 
         public string GetFormattedTimestamp()
         {
-            return "ÅyÇ†Ç†Ç†Ç†Åz";
+            Console.WriteLine("ÅyDebugÅzÇP");
+
+            if (Binder == null)
+            {
+                return "";
+            }
+            else
+            { 
+                return Binder.GetFormattedTimestamp();
+            }
         }
 
         public void OnServiceDisconnected(ComponentName name)

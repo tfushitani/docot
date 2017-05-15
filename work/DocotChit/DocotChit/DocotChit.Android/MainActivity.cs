@@ -21,7 +21,7 @@ namespace DocotChit.Droid
 
 			global::Xamarin.Forms.Forms.Init (this, bundle);
 
-            ServiceConnectionStubAndroid serviceConnectionStub = new ServiceConnectionStubAndroid();
+            ServiceConnectionStubAndroid serviceConnectionStub = new ServiceConnectionStubAndroid(this);
 
 
             LoadApplication (new DocotChit.App (serviceConnectionStub));
