@@ -14,7 +14,10 @@ namespace DocotChit
 {
 	public partial class MainPage : ContentPage
 	{
-		public MainPage()
+        private ServiceConnectionStub m_docotService { get; set; }
+       
+
+        public MainPage()
 		{
 			InitializeComponent();
 		}
@@ -23,7 +26,9 @@ namespace DocotChit
         {
             InitializeComponent();
 
-            Console.WriteLine("【Debug】MainPage x =" + x.Getstr());
+            m_docotService = x;
+
+
         }
 
 
@@ -32,6 +37,8 @@ namespace DocotChit
         //
         async void Button_ClickedAsync(object sender, System.EventArgs e)
         {
+            Console.WriteLine("【Debug】MainPage x =" + m_docotService.Getstr());
+
             if (null == editor1.Text ||
                 "" == editor1.Text)
             {
