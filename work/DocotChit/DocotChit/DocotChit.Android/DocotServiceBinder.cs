@@ -19,9 +19,30 @@ namespace DocotChit.Droid
             this.Service = service;
         }
 
+        public void RegisterLatitudeLongtude()
+        {
+            Service.RegisterLatitudeLongtude();
+        }
+
         public string GetFormattedTimestamp()
         {
             return Service?.GetFormattedTimestamp();
+        }
+
+        public bool IsUserInfoRegistered()
+        {
+            return Service.IsUserInfoRegistered();
+        }
+
+        public void SetUserPreferences(string deviceId, string nickname)
+        {
+            Service.SetUserPreferences(deviceId, nickname);
+
+        }
+
+        public void RemoveUserPreference()
+        {
+            Service.RemoveUserPreference();
         }
 
         public DocotService Service { get; private set; }

@@ -136,107 +136,165 @@ namespace DocotChit.Droid
         /// <param name="longitude"></param>
         async void UpdateLatitudeLongtude(String latitude, String longitude)
         {
-            var method = new HttpMethod("PATCH");
+            string deviceId = GetDeviceID();
+
+            if("" != deviceId)
+            { 
+                var method = new HttpMethod("PATCH");
 
 
-            String jsonString = "{\"latitude\":" + latitude + ",\"longitude\":" + longitude + "}";
+                String jsonString = "{\"latitude\":" + latitude + ",\"longitude\":" + longitude + "}";
 
 
-            HttpContent content = new StringContent(jsonString, Encoding.UTF8, "application/json");
+                HttpContent content = new StringContent(jsonString, Encoding.UTF8, "application/json");
 
-            var request = new HttpRequestMessage(method, "http://182.163.58.118:8080/docot/v1/devices/MYHZKL26OVBSRP5M6ROP7MPYIQ/")
-            {
-                Content = content
-            };
+                var request = new HttpRequestMessage(method, "http://182.163.58.118:8080/docot/v1/devices/" + deviceId + "/")
+                {
+                    Content = content
+                };
 
-            HttpResponseMessage response = new HttpResponseMessage();
-            // In case you want to set a timeout
-            //CancellationToken cancellationToken = new CancellationTokenSource(60).Token;
+                HttpResponseMessage response = new HttpResponseMessage();
+                // In case you want to set a timeout
+                //CancellationToken cancellationToken = new CancellationTokenSource(60).Token;
 
-            var client = new HttpClient();
+                var client = new HttpClient();
 
-            try
-            {
-                response = await client.SendAsync(request);
+                try
+                {
+                    response = await client.SendAsync(request);
 
-                // If you want to use the timeout you set
-                //response = await client.SendRequestAsync(request).AsTask(cancellationToken);
+                    // If you want to use the timeout you set
+                    //response = await client.SendRequestAsync(request).AsTask(cancellationToken);
+                }
+                catch (TaskCanceledException e)
+                {
+                    Console.WriteLine("ERROR: " + e.ToString());
+                }
+
+                String resp;
+                resp = await response.Content.ReadAsStringAsync();
+
+                Console.WriteLine(resp);
             }
-            catch (TaskCanceledException e)
-            {
-                Console.WriteLine("ERROR: " + e.ToString());
-            }
-
-            String resp;
-            resp = await response.Content.ReadAsStringAsync();
-
-            Console.WriteLine(resp);
-
+ 
             return;
         }
 
-
-        async void RegisterLatitudeLongtude()
+        public async void RegisterLatitudeLongtude()
         {
-            var method = new HttpMethod("PATCH");
+            string deviceId = GetDeviceID();
 
-            locator.DesiredAccuracy = 50; // <- 1. 50mの精度に指定
-
-            String latitude;
-            String longitude;
-
-            Position position = await locator.GetPositionAsync(timeoutMilliseconds: 10000);
-            latitude = position.Latitude.ToString();
-            longitude = position.Longitude.ToString();
-
-
-            String jsonString = "{\"latitude\":" + latitude + ",\"longitude\":" + longitude + "}";
-
-
-            HttpContent content = new StringContent(jsonString, Encoding.UTF8, "application/json");
-
-            var request = new HttpRequestMessage(method, "http://182.163.58.118:8080/docot/v1/devices/MYHZKL26OVBSRP5M6ROP7MPYIQ/")
+            if ("" != deviceId)
             {
-                Content = content
-            };
-            
-            HttpResponseMessage response = new HttpResponseMessage();
-            // In case you want to set a timeout
-            //CancellationToken cancellationToken = new CancellationTokenSource(60).Token;
 
-            var client = new HttpClient();
+                var method = new HttpMethod("PATCH");
 
-            try
-            {
-                response = await client.SendAsync(request);
+                locator.DesiredAccuracy = 50; // <- 1. 50mの精度に指定
 
+                String latitude;
+                String longitude;
+
+                Position position = await locator.GetPositionAsync(timeoutMilliseconds: 10000);
+                latitude = position.Latitude.ToString();
+                longitude = position.Longitude.ToString();
 
 
-                // If you want to use the timeout you set
-                //response = await client.SendRequestAsync(request).AsTask(cancellationToken);
+                String jsonString = "{\"latitude\":" + latitude + ",\"longitude\":" + longitude + "}";
+
+
+                HttpContent content = new StringContent(jsonString, Encoding.UTF8, "application/json");
+
+                var request = new HttpRequestMessage(method, "http://182.163.58.118:8080/docot/v1/devices/" + deviceId + "/")
+                {
+                    Content = content
+                };
+
+                HttpResponseMessage response = new HttpResponseMessage();
+                // In case you want to set a timeout
+                //CancellationToken cancellationToken = new CancellationTokenSource(60).Token;
+
+                var client = new HttpClient();
+
+                try
+                {
+                    response = await client.SendAsync(request);
+
+
+
+                    // If you want to use the timeout you set
+                    //response = await client.SendRequestAsync(request).AsTask(cancellationToken);
+                }
+                catch (TaskCanceledException e)
+                {
+                    Console.WriteLine("ERROR: " + e.ToString());
+                }
+
+                String resp;
+                resp = await response.Content.ReadAsStringAsync();
+
+                Console.WriteLine(resp);
             }
-            catch (TaskCanceledException e)
-            {
-                Console.WriteLine("ERROR: " + e.ToString());
-            }
-
-            String resp;
-            resp =await response.Content.ReadAsStringAsync();
-
-            Console.WriteLine(resp);
 
             return;
         }
 
         public IBinder Binder { get; private set; }
 
-
+        #region 外部公開API
 
         public string GetFormattedTimestamp()
         {
             return "せいこう！";
         }
 
+        public bool IsUserInfoRegistered()
+        {
+            bool result = false;
+
+            ISharedPreferences prefs = this.GetSharedPreferences("DOCOT_SETTINGS", FileCreationMode.Private);
+
+            string deviceId = prefs.GetString("DEVICE_ID", "");
+
+            if("" != deviceId)
+            {
+                result = true;
+            }
+
+            Console.WriteLine("【Debug】GetSharedPreferences[deviceId = " + deviceId + "]");
+
+            return result;
+        }
+
+        public void SetUserPreferences(string deviceId, string nickname)
+        {
+            Console.WriteLine("【Debug】SetUserPreferences[deviceId = " + deviceId + ", nickname = " + nickname);
+            ISharedPreferences prefs = this.GetSharedPreferences("DOCOT_SETTINGS", FileCreationMode.Private);
+            ISharedPreferencesEditor editor = prefs.Edit();
+            editor.PutString("DEVICE_ID", deviceId);
+            editor.PutString("NICK_NAME",nickname);
+            editor.Apply();
+            return;
+        }
+
+        public void RemoveUserPreference()
+        {
+            ISharedPreferences prefs = this.GetSharedPreferences("DOCOT_SETTINGS", FileCreationMode.Private);
+            ISharedPreferencesEditor editor = prefs.Edit();
+            editor.Clear();
+            editor.Apply();
+            return;
+        }
+
+        public string GetDeviceID()
+        {
+            ISharedPreferences prefs = this.GetSharedPreferences("DOCOT_SETTINGS", FileCreationMode.Private);
+
+            return prefs.GetString("DEVICE_ID", "");
+
+        }
+
+
+        #endregion
 
         #region 内部クラス
         /// <summary>

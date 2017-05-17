@@ -32,6 +32,17 @@ namespace DocotChit
         }
 
 
+        void RemoveButton_ClickedAsync(object sender, System.EventArgs e)
+        {
+            m_docotService.RemoveUserPreference();
+        }
+
+            void RegistButton_ClickedAsync(object sender, System.EventArgs e)
+        {
+            m_docotService.RegisterLatitudeLongtude();
+        }
+
+
         //
         // 登録・更新ボタンクリック イベントハンドラ
         //
@@ -58,21 +69,23 @@ namespace DocotChit
                 if (true == IsUserInfoRegstered())
                 {
                     Console.WriteLine("ユーザー情報がすでに登録されている");
+
+                    await DisplayAlert("失敗", "既に登録されとっばい", "OK");
+
                 }
                 else
                 {
                     str = await RegisterUserInfo(editor1.Text);
+
+                    RegisterUserInfoResponseData data = JsonConvert.DeserializeObject<RegisterUserInfoResponseData>(str);
+
+                    // 設定情報に保存する
+                    SetUserPreferences(data.deviceId, data.nickname);
+
+                    await DisplayAlert("成功", "登録の終わったばい", "OK");
+
                 }
-
-                RegisterUserInfoResponseData data = JsonConvert.DeserializeObject<RegisterUserInfoResponseData>(str);
-
-                // 設定情報に保存する
-                Application.Current.Properties["nickname"] = data.nickname;
-                Application.Current.Properties["deviceId"] = data.deviceId;
-
-                await DisplayAlert("成功", "登録の終わったばい", "OK");
             }
-
         }
 
         //
@@ -111,16 +124,21 @@ namespace DocotChit
         {
             bool response = false;
 
-            if (Application.Current.Properties.ContainsKey("deviceId"))
+            if (m_docotService.IsUserInfoRegistered())
             {
                 //
                 // すでに自端末情報が登録されている場合はtrueを返す
                 //
-                var id = Application.Current.Properties["deviceId"] as String;
                 response = true;
             }
 
             return response;
+        }
+
+        public void SetUserPreferences(string deviceId, string nickname)
+        {
+            m_docotService.SetUserPreferences(deviceId, nickname);
+
         }
 
     }

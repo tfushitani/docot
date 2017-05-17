@@ -8,5 +8,12 @@ namespace DocotChit
     {
         public abstract string Getstr();
 
+        public abstract bool IsUserInfoRegistered();
+
+        public abstract void RegisterLatitudeLongtude();
+
+        public abstract void SetUserPreferences(string deviceId, string nickname);
+
+        public abstract void RemoveUserPreference();
     }
 }

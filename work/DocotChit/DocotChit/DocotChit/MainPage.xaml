@@ -12,5 +12,12 @@
         <Editor x:Name="editor1" />
         
         <Button Text="登録・更新" Clicked="Button_ClickedAsync"></Button>
+
+        <Button Text="ユーザー情報を削除" Clicked="RemoveButton_ClickedAsync"></Button>
+        
+        <Button Text="位置情報登録" Clicked="RegistButton_ClickedAsync"></Button>
+        
+        
+        
     </StackLayout>
 </ContentPage>

@@ -28,10 +28,13 @@ namespace DocotChit.Droid
             IsConnected = this.Binder != null;
         }
 
+        public void RegisterLatitudeLongtude()
+        {
+            Binder.RegisterLatitudeLongtude();
+        }
+
         public string GetFormattedTimestamp()
         {
-            Console.WriteLine("ÅyDebugÅzÇP");
-
             if (Binder == null)
             {
                 return "";
@@ -40,6 +43,29 @@ namespace DocotChit.Droid
             { 
                 return Binder.GetFormattedTimestamp();
             }
+        }
+
+        public bool IsUserInfoRegistered()
+        {
+            bool result = false;
+
+            if(Binder != null)
+            {
+                result = Binder.IsUserInfoRegistered();
+            }
+
+            return result;
+        }
+
+        public void SetUserPreferences(string deviceId, string nickname)
+        {
+            Binder.SetUserPreferences(deviceId, nickname);
+
+        }
+
+        public void RemoveUserPreference()
+        {
+            Binder.RemoveUserPreference();
         }
 
         public void OnServiceDisconnected(ComponentName name)

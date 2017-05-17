@@ -27,5 +27,28 @@ namespace DocotChit.Droid
         {
             return connection.GetFormattedTimestamp();
         }
+
+
+        public override void RegisterLatitudeLongtude()
+        {
+            connection.RegisterLatitudeLongtude();
+        }
+
+
+        public override bool IsUserInfoRegistered()
+        {
+            return connection.IsUserInfoRegistered();
+        }
+
+        public override void SetUserPreferences(string deviceId, string nickname)
+        {
+            connection.SetUserPreferences(deviceId, nickname);
+        }
+
+        public override void RemoveUserPreference()
+        {
+            connection.RemoveUserPreference();
+        }
+
     }
 }
