@@ -16,8 +16,11 @@
         <Button Text="ユーザー情報を削除" Clicked="RemoveButton_ClickedAsync"></Button>
         
         <Button Text="位置情報登録" Clicked="RegistButton_ClickedAsync"></Button>
-        
-        
-        
+
+        <Button Text="カメラ画像取得中" Clicked="CameraButton_ClickedAsync"></Button>
+
+        <Image x:Name="cameraImage"></Image>
+            
+
     </StackLayout>
 </ContentPage>

@@ -31,6 +31,17 @@ namespace DocotChit
 
         }
 
+        async void CameraButton_ClickedAsync(object sender, System.EventArgs e)
+        {
+            var file = await Plugin.Media.CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
+            {
+                DefaultCamera = Plugin.Media.Abstractions.CameraDevice.Front,
+                AllowCropping = false,
+            });
+            if (file == null) { return; }
+
+            cameraImage.Source = ImageSource.FromStream(() => file.GetStream());
+        }
 
         void RemoveButton_ClickedAsync(object sender, System.EventArgs e)
         {

@@ -20,6 +20,7 @@ namespace DocotChit
         {
             InitializeComponent();
 
+            Plugin.Media.CrossMedia.Current.Initialize();
             MainPage = new DocotChit.MainPage(x);
         }
 
