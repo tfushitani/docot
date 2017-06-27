@@ -2,6 +2,8 @@ package jp.or.hills_kobayashi.docot.api;
 
 import jp.or.hills_kobayashi.docot.model.Device;
 import jp.or.hills_kobayashi.docot.model.DeviceHistory;
+import jp.or.hills_kobayashi.docot.model.DeviceHistoryEx;
+import jp.or.hills_kobayashi.docot.repository.DeviceHistoryExRepository;
 import jp.or.hills_kobayashi.docot.repository.DeviceHistoryRepository;
 import jp.or.hills_kobayashi.docot.repository.DeviceRepository;
 import jp.or.hills_kobayashi.docot.utility.ApplicationUtils;
@@ -26,6 +28,9 @@ public class DeviceAPI {
 
     @Autowired
     private DeviceRepository deviceRepository;
+
+    @Autowired
+    private DeviceHistoryExRepository deviceHistoryExRepository;
 
     @Autowired
     private DeviceHistoryRepository deviceHistoryRepository;
@@ -69,6 +74,11 @@ public class DeviceAPI {
             device.setCityCode(position.getCityCode());
             device.setCityName(position.getCityName());
             device.setPositionUpdated(new Timestamp(System.currentTimeMillis()));
+
+            DeviceHistoryEx deviceHistoryEx = new DeviceHistoryEx();
+            BeanUtils.copyProperties(device, deviceHistoryEx);
+            deviceHistoryEx.setUpdated(device.getPositionUpdated());
+            deviceHistoryExRepository.save(deviceHistoryEx);
         }
 
         device = deviceRepository.save(device);
@@ -101,9 +111,23 @@ public class DeviceAPI {
         return ApplicationUtils.hideSecret(device);
     }
 
+    /*
     @RequestMapping(value = "{deviceId}/histories",method = RequestMethod.GET)
     public List<DeviceHistory> getDeviceHistories(@PathVariable String deviceId, @RequestParam String sinceHistorySeq) throws Exception {
         List<DeviceHistory> deviceHistories = new ArrayList<DeviceHistory>();
+        return deviceHistories;
+    }
+    */
+
+    @RequestMapping(value = "{deviceId}/histories",method = RequestMethod.GET)
+    public List<DeviceHistoryEx> getDeviceHistoriesEx(@PathVariable String deviceId, @RequestParam(required = false) Long updatedWithin) throws Exception {
+        List<DeviceHistoryEx> deviceHistories;
+        if (updatedWithin != null) {
+            Timestamp positionUpdatedGreaterThanEqual = new Timestamp(System.currentTimeMillis() - updatedWithin);
+            deviceHistories = deviceHistoryExRepository.findByDeviceIdAndUpdatedGreaterThanEqualOrderByUpdatedDesc(deviceId, positionUpdatedGreaterThanEqual);
+        } else {
+            deviceHistories = deviceHistoryExRepository.findByDeviceIdOrderByUpdatedDesc(deviceId);
+        }
         return deviceHistories;
     }
 
