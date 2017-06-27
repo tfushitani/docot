@@ -16,8 +16,16 @@ $(function(){
 function dateFormat(value, row, index) {
     if (value) {
         //return moment(value).format('YYYY/MM/DD HH:mm:ss');
-        return moment(value).format('HH:mm');
+        return moment(value).format('MM/DD HH:mm');
     } else {
         return "-";
     }
+}
+
+function mapLinkFormat(value, row, index) {
+    return "<a href='https://maps.google.com/maps?q=" + row.latitude + "," + row.longitude + "'>" + value + "</a>";
+}
+
+function historyLinkFormat(value, row, index) {
+    return "<a href='/history.html/?deviceId=" + row.deviceId + "'>" + value + "</a>";
 }
