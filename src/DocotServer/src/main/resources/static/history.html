@@ -13,25 +13,21 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/locale/bootstrap-table-ja-JP.min.js"></script>
 
     <script src="https://momentjs.com/downloads/moment.min.js"></script>
-    <script src="/js/main.js"></script>
+    <script src="/js/history.js"></script>
 </head>
 <body>
 
 <div class="container">
-    <h2>Docot Information</h2>
-    <p>更新日時が24時間以内の情報ば表示しとるよ。アプリインストール直後や電源オフったりしとったら表示されんことのあっばい。</p>
+    <h2><span id="nicknameTitle"></span>'s History</h2>
+    <p>更新日時が7日間以内の情報ば表示しとるよ。</p>
     <table class="table table-striped" id="devices">
         <thead>
         <tr>
-            <th data-field="nickname" data-formatter="historyLinkFormat">ニックネーム</th>
+            <th data-field="updated" data-formatter="dateFormat">更新日時</th>
             <th data-field="address" data-formatter="mapLinkFormat">所在地</th>
-            <th data-field="positionUpdated" data-formatter="dateFormat">更新日時</th>
         </tr>
         </thead>
     </table>
-    <br>
-    <p>位置情報の共有にご協力いただける場合は<a href="#" onclick="alert('まだアプリ開発中だしバカやろー！')">こちら</a>からアプリをダウンロードしてください</p>
-    <br>
 </div>
 
 </body>
