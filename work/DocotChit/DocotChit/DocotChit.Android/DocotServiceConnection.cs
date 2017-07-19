@@ -65,7 +65,9 @@ namespace DocotChit.Droid
 
         public void RemoveUserPreference()
         {
-            Binder.RemoveUserPreference();
+            Binder
+                
+                .RemoveUserPreference();
         }
 
         public void OnServiceDisconnected(ComponentName name)
